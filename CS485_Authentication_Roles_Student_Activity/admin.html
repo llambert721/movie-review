@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar adminbar">
+  <div class="nav">
+    <div><strong>Northstar Coffee</strong><span>Administrator Dashboard</span></div>
+    <button id="logoutButton">Logout</button>
+  </div>
+</header>
+<main class="dashboard">
+  <section class="welcome adminwelcome">
+    <p class="eyebrow">ADMIN AREA</p>
+    <h1>Administrator Access</h1>
+    <p>Only accounts with the admin role should reach this page.</p>
+  </section>
+  <section class="grid">
+    <article class="panel">
+      <h2>Signed In As</h2>
+      <p><strong>Name:</strong> <span id="userName"></span></p>
+      <p><strong>Email:</strong> <span id="userEmail"></span></p>
+      <p><strong>Role:</strong> <span id="userRole"></span></p>
+    </article>
+    <article class="panel">
+      <h2>Administration</h2>
+      <p>Manage users, orders, reports, and site settings.</p>
+    </article>
+  </section>
+</main>
+<script src="dashboard.js"></script>
+</body>
+</html>
