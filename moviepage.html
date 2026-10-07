@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="nav">
+    <div><strong>Northstar Coffee</strong><span>User Dashboard</span></div>
+    <button id="logoutButton">Logout</button>
+  </div>
+</header>
+<main class="dashboard">
+  <section class="welcome">
+    <p class="eyebrow">USER AREA</p>
+    <h1>Welcome, <span id="userName"></span></h1>
+    <p>This page is available to authenticated users.</p>
+  </section>
+  <section class="grid">
+    <article class="panel">
+      <h2>Your Account</h2>
+      <p><strong>Email:</strong> <span id="userEmail"></span></p>
+      <p><strong>Role:</strong> <span id="userRole"></span></p>
+    </article>
+    <article class="panel">
+      <h2>User Features</h2>
+      <p>View menu, place orders, and manage personal activity.</p>
+    </article>
+  </section>
+</main>
+<script src="dashboard.js"></script>
+</body>
+</html>
