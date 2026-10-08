@@ -3,42 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Northstar Coffee Login</title>
+<title>Movie Review - Login</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body class="auth-page">
 <div class="auth-shell">
   <section class="auth-brand">
-    <p class="eyebrow">Northstar Coffee</p>
-    <h1>Authentication and Role-Based Access</h1>
-    <p>Login information is checked by the Flask API against MongoDB.</p>
+    <p class="eyebrow">Movie Review App</p>
+    <h1>Rate & Discover Great Movies</h1>
+    <p>Sign in to post reviews, browse community ratings, and share your thoughts.</p>
     <div class="flow">
-      <span>Login Form</span><span>→</span><span>Flask API</span><span>→</span>
-      <span>MongoDB</span><span>→</span><span>Role Check</span>
+      <span>Find Movies</span><span>→</span><span>Write Reviews</span><span>→</span>
+      <span>Rate & Comment</span><span>→</span><span>Community Feed</span>
     </div>
   </section>
 
   <section class="auth-card">
-    <div class="logo">NC</div>
+    <div class="logo">MR</div>
     <h2>Sign In</h2>
-    <p class="muted">Use your account to continue.</p>
+    <p class="muted">Enter your account credentials to continue.</p>
 
     <form id="loginForm">
-      <label>Email
-        <input id="email" type="email" required>
+      <label>Username
+        <input id="username" type="text" required autocomplete="username">
       </label>
       <label>Password
-        <input id="password" type="password" required>
+        <input id="password" type="password" required autocomplete="current-password">
       </label>
       <button type="submit" class="primary">Login</button>
     </form>
 
     <p id="message" class="message"></p>
 
+    <p class="muted auth-switch">
+      Don't have an account? <a href="adduser.html">Create a user account</a>
+    </p>
+
     <div class="demo-box">
-      <strong>Class Demo Accounts</strong>
-      <p>User: user@coffee.local / User123!</p>
-      <p>Admin: admin@coffee.local / Admin123!</p>
+      <strong>Demo Accounts</strong>
+      <p>User: user / User123!</p>
+      <p>Admin: admin / Admin123!</p>
     </div>
   </section>
 </div>

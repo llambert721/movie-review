@@ -3,45 +3,61 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Northstar Coffee Login</title>
+<title>Admin - Create Admin Account</title>
 <link rel="stylesheet" href="style.css">
 </head>
-<body class="auth-page">
-<div class="auth-shell">
-  <section class="auth-brand">
-    <p class="eyebrow">Northstar Coffee</p>
-    <h1>Authentication and Role-Based Access</h1>
-    <p>Login information is checked by the Flask API against MongoDB.</p>
-    <div class="flow">
-      <span>Login Form</span><span>→</span><span>Flask API</span><span>→</span>
-      <span>MongoDB</span><span>→</span><span>Role Check</span>
+<body>
+<header class="topbar adminbar">
+  <div class="nav">
+    <div><strong>Movie Review</strong><span>Administrator Area</span></div>
+    <div>
+      <a href="myprofileadmin.html">Admin Profile</a>
+      <a href="feed.html">Feed</a>
+      <a href="moviefeed.html">Movies</a>
+      <button id="logoutButton">Logout</button>
     </div>
+  </div>
+</header>
+<main class="dashboard">
+  <section class="welcome adminwelcome">
+    <p class="eyebrow">ADMIN AREA</p>
+    <h1>Create Administrator Account</h1>
+    <p>Register a new administrator with elevated management privileges.</p>
   </section>
 
-  <section class="auth-card">
-    <div class="logo">NC</div>
-    <h2>Sign In</h2>
-    <p class="muted">Use your account to continue.</p>
+  <section class="grid">
+    <article class="panel">
+      <h2>New Admin Information</h2>
+      <form id="addAdminForm" class="panel-form">
+        <label>Username
+          <input id="adminUsername" type="text" required placeholder="e.g. admin_lead">
+        </label>
+        <label>Display Name
+          <input id="adminDisplayName" type="text" required placeholder="e.g. Lead Administrator">
+        </label>
+        <label>Password
+          <input id="adminPassword" type="password" required placeholder="At least 6 characters">
+        </label>
+        <button type="submit" class="primary btn-submit">Create Admin Account</button>
+      </form>
+      <p id="adminMessage" class="message"></p>
+    </article>
 
-    <form id="loginForm">
-      <label>Email
-        <input id="email" type="email" required>
-      </label>
-      <label>Password
-        <input id="password" type="password" required>
-      </label>
-      <button type="submit" class="primary">Login</button>
-    </form>
-
-    <p id="message" class="message"></p>
-
-    <div class="demo-box">
-      <strong>Class Demo Accounts</strong>
-      <p>User: user@coffee.local / User123!</p>
-      <p>Admin: admin@coffee.local / Admin123!</p>
-    </div>
+    <article class="panel">
+      <h2>Administrator Privileges</h2>
+      <p>Administrators have permissions to manage the entire platform:</p>
+      <ul class="action-list">
+        <li>Approve and delete user reviews</li>
+        <li>Add, update, and remove movie listings</li>
+        <li>Review pending movie submissions</li>
+        <li>Create additional administrator accounts</li>
+      </ul>
+      <p class="back-link">
+        <a href="myprofileadmin.html">← Return to Admin Profile</a>
+      </p>
+    </article>
   </section>
-</div>
-<script src="login.js"></script>
+</main>
+<script src="addadmin.js"></script>
 </body>
 </html>

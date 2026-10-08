@@ -3,34 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>User Dashboard</title>
+<title>Admin Profile - Movie Review</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="topbar">
+<header class="topbar adminbar">
   <div class="nav">
-    <div><strong>Northstar Coffee</strong><span>User Dashboard</span></div>
-    <button id="logoutButton">Logout</button>
+    <div><strong>Movie Review</strong><span>Administrator Dashboard</span></div>
+    <div>
+      <a href="feed.html">Feed</a>
+      <a href="moviefeed.html">Movies</a>
+      <a href="pending.html">Pending Posts</a>
+      <button id="logoutButton">Logout</button>
+    </div>
   </div>
 </header>
 <main class="dashboard">
-  <section class="welcome">
-    <p class="eyebrow">USER AREA</p>
-    <h1>Welcome, <span id="userName"></span></h1>
-    <p>This page is available to authenticated users.</p>
+  <section class="welcome adminwelcome">
+    <p class="eyebrow">ADMIN AREA</p>
+    <h1>Administrator Profile</h1>
+    <p>Welcome, <span id="adminGreeting"></span>. You have full administrator access.</p>
   </section>
+
   <section class="grid">
     <article class="panel">
-      <h2>Your Account</h2>
-      <p><strong>Email:</strong> <span id="userEmail"></span></p>
-      <p><strong>Role:</strong> <span id="userRole"></span></p>
+      <h2>Account Details</h2>
+      <p><strong>Username:</strong> <span id="adminUsername"></span></p>
+      <p><strong>Display Name:</strong> <span id="adminDisplayName"></span></p>
+      <p><strong>Role:</strong> <span id="adminRole">Administrator</span></p>
     </article>
+
     <article class="panel">
-      <h2>User Features</h2>
-      <p>View menu, place orders, and manage personal activity.</p>
+      <h2>Admin Actions</h2>
+      <p>Manage system users and application content.</p>
+      <p>
+        <a href="addadmin.html" class="primary btn-action">+ Create New Admin Account</a>
+      </p>
+      <ul class="action-list">
+        <li><a href="feed.html">View Community Feed</a></li>
+        <li><a href="moviefeed.html">Manage Movie Catalog</a></li>
+        <li><a href="pending.html">Review Pending Posts</a></li>
+      </ul>
     </article>
   </section>
 </main>
-<script src="dashboard.js"></script>
+<script src="myprofileadmin.js"></script>
 </body>
 </html>
