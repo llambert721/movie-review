@@ -3,34 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>User Dashboard</title>
+<title>My Profile - Movie Review</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header class="topbar">
   <div class="nav">
-    <div><strong>Northstar Coffee</strong><span>User Dashboard</span></div>
-    <button id="logoutButton">Logout</button>
+    <div><strong>Movie Review</strong><span>User Profile</span></div>
+    <div>
+      <a href="feed.html">Feed</a>
+      <a href="moviefeed.html">Movies</a>
+      <button id="logoutButton">Logout</button>
+    </div>
   </div>
 </header>
 <main class="dashboard">
   <section class="welcome">
     <p class="eyebrow">USER AREA</p>
-    <h1>Welcome, <span id="userName"></span></h1>
-    <p>This page is available to authenticated users.</p>
+    <h1>Welcome, <span id="userGreeting"></span></h1>
+    <p>Manage your account and view all your movie reviews.</p>
   </section>
+
   <section class="grid">
     <article class="panel">
-      <h2>Your Account</h2>
-      <p><strong>Email:</strong> <span id="userEmail"></span></p>
-      <p><strong>Role:</strong> <span id="userRole"></span></p>
+      <h2>Account Information</h2>
+      <p><strong>Username:</strong> <span id="userUsername"></span></p>
+      <p><strong>Display Name:</strong> <span id="userDisplayName"></span></p>
+      <p><strong>Role:</strong> <span id="userRole">Member</span></p>
+      <p class="profile-link-container">
+        <a id="publicProfileLink" href="#">View your public profile page →</a>
+      </p>
     </article>
+
     <article class="panel">
-      <h2>User Features</h2>
-      <p>View menu, place orders, and manage personal activity.</p>
+      <h2>Review Activity</h2>
+      <p><strong>Total Reviews:</strong> <span id="postCount">0</span></p>
+      <p>Share your perspective on movies and browse community ratings.</p>
+      <ul class="action-list">
+        <li><a href="moviefeed.html">Browse Movies to Review</a></li>
+        <li><a href="feed.html">Community Review Feed</a></li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="reviews-section">
+    <article class="panel">
+      <h2>My Reviews</h2>
+      <div id="postsList">
+        <p class="muted">Loading your reviews...</p>
+      </div>
     </article>
   </section>
 </main>
-<script src="dashboard.js"></script>
+<script src="myprofileuser.js"></script>
 </body>
 </html>
