@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Movie Review - Login</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-page">
+<div class="auth-shell">
+  <section class="auth-brand">
+    <p class="eyebrow">Movie Review App</p>
+    <h1>Rate & Discover Great Movies</h1>
+    <p>Sign in to post reviews, browse community ratings, and share your thoughts.</p>
+    <div class="flow">
+      <span>Find Movies</span><span>→</span><span>Write Reviews</span><span>→</span>
+      <span>Rate & Comment</span><span>→</span><span>Community Feed</span>
+    </div>
+  </section>
+
+  <section class="auth-card">
+    <div class="logo">MR</div>
+    <h2>Sign In</h2>
+    <p class="muted">Enter your account credentials to continue.</p>
+
+    <form id="loginForm">
+      <label>Username
+        <input id="username" type="text" required autocomplete="username">
+      </label>
+      <label>Password
+        <input id="password" type="password" required autocomplete="current-password">
+      </label>
+      <button type="submit" class="primary">Login</button>
+    </form>
+
+    <p id="message" class="message"></p>
+
+    <p class="muted auth-switch">
+      Don't have an account? <a href="adduser.html">Create a user account</a>
+    </p>
+
+    <div class="demo-box">
+      <strong>Demo Accounts</strong>
+      <p>User: user / User123!</p>
+      <p>Admin: admin / Admin123!</p>
+    </div>
+  </section>
+</div>
+<script src="login.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Movie Review - Create Account</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-page">
+<div class="auth-shell">
+  <section class="auth-brand">
+    <p class="eyebrow">Movie Review App</p>
+    <h1>Join the Community</h1>
+    <p>Create your user account to start reviewing movies and rating cinema.</p>
+    <div class="flow">
+      <span>Sign Up</span><span>→</span><span>Explore Movies</span><span>→</span>
+      <span>Post Reviews</span><span>→</span><span>Share Ratings</span>
+    </div>
+  </section>
+
+  <section class="auth-card">
+    <div class="logo">MR</div>
+    <h2>Create User Account</h2>
+    <p class="muted">Fill in your details to create a new user account.</p>
+
+    <form id="addUserForm">
+      <label>Username
+        <input id="username" type="text" required autocomplete="username" placeholder="e.g. film_buff">
+      </label>
+      <label>Display Name
+        <input id="displayName" type="text" required placeholder="e.g. Film Buff">
+      </label>
+      <label>Password
+        <input id="password" type="password" required autocomplete="new-password" placeholder="At least 6 characters">
+      </label>
+      <button type="submit" class="primary">Create Account</button>
+    </form>
+
+    <p id="message" class="message"></p>
+
+    <p class="muted auth-switch">
+      Already have an account? <a href="login.html">Sign In</a>
+    </p>
+  </section>
+</div>
+<script src="adduser.js"></script>
+</body>
+</html>

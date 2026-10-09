@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Create Admin Account</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar adminbar">
+  <div class="nav">
+    <div><strong>Movie Review</strong><span>Administrator Area</span></div>
+    <div>
+      <a href="myprofileadmin.html">Admin Profile</a>
+      <a href="feed.html">Feed</a>
+      <a href="moviefeed.html">Movies</a>
+      <button id="logoutButton">Logout</button>
+    </div>
+  </div>
+</header>
+<main class="dashboard">
+  <section class="welcome adminwelcome">
+    <p class="eyebrow">ADMIN AREA</p>
+    <h1>Create Administrator Account</h1>
+    <p>Register a new administrator with elevated management privileges.</p>
+  </section>
+
+  <section class="grid">
+    <article class="panel">
+      <h2>New Admin Information</h2>
+      <form id="addAdminForm" class="panel-form">
+        <label>Username
+          <input id="adminUsername" type="text" required placeholder="e.g. admin_lead">
+        </label>
+        <label>Display Name
+          <input id="adminDisplayName" type="text" required placeholder="e.g. Lead Administrator">
+        </label>
+        <label>Password
+          <input id="adminPassword" type="password" required placeholder="At least 6 characters">
+        </label>
+        <button type="submit" class="primary btn-submit">Create Admin Account</button>
+      </form>
+      <p id="adminMessage" class="message"></p>
+    </article>
+
+    <article class="panel">
+      <h2>Administrator Privileges</h2>
+      <p>Administrators have permissions to manage the entire platform:</p>
+      <ul class="action-list">
+        <li>Approve and delete user reviews</li>
+        <li>Add, update, and remove movie listings</li>
+        <li>Review pending movie submissions</li>
+        <li>Create additional administrator accounts</li>
+      </ul>
+      <p class="back-link">
+        <a href="myprofileadmin.html">← Return to Admin Profile</a>
+      </p>
+    </article>
+  </section>
+</main>
+<script src="addadmin.js"></script>
+</body>
+</html>

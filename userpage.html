@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Profile - Movie Review</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="nav">
+    <div><strong>Movie Review</strong><span>Community Profile</span></div>
+    <div>
+      <a href="feed.html">Feed</a>
+      <a href="moviefeed.html">Movies</a>
+      <a id="myProfileLink" href="myprofileuser.html">My Profile</a>
+      <button id="authButton">Logout</button>
+    </div>
+  </div>
+</header>
+<main class="dashboard">
+  <section class="welcome">
+    <p class="eyebrow">USER PROFILE</p>
+    <h1><span id="profileDisplayName">User Profile</span></h1>
+    <p class="muted">@<span id="profileUsername">...</span></p>
+  </section>
+
+  <section class="grid">
+    <article class="panel">
+      <h2>Profile Details</h2>
+      <p><strong>Username:</strong> <span id="infoUsername"></span></p>
+      <p><strong>Display Name:</strong> <span id="infoDisplayName"></span></p>
+      <p><strong>Account Type:</strong> <span id="infoRole">Member</span></p>
+    </article>
+
+    <article class="panel">
+      <h2>Community Stats</h2>
+      <p><strong>Total Reviews:</strong> <span id="userPostCount">0</span></p>
+      <p><a href="feed.html">Explore more reviews on the feed →</a></p>
+    </article>
+  </section>
+
+  <section class="reviews-section">
+    <article class="panel">
+      <h2>Reviews by <span id="reviewsHeaderName">User</span></h2>
+      <div id="userPostsList">
+        <p class="muted">Loading reviews...</p>
+      </div>
+    </article>
+  </section>
+</main>
+<script src="userpage.js"></script>
+</body>
+</html>
