@@ -91,6 +91,24 @@ def format_post(post):
     }
 
 
+# Helper: find post by id
+def find_post_by_id(post_id):
+    if not ObjectId.is_valid(post_id):
+        return None
+    try:
+        return posts_collection.find_one({"_id": ObjectId(post_id)})
+    except Exception:
+        return None
+
+
+# Helper: check if session user owns a post
+def is_post_owner(post, user_id):
+    post_user_id = post.get("user_id")
+    if post_user_id is None or user_id is None:
+        return False
+    return str(post_user_id) == str(user_id)
+
+
 # ==========================================
 # PAGE ROUTES
 # ==========================================
@@ -360,6 +378,68 @@ def get_user_posts(identifier):
 
     posts = list(posts_collection.find(query).sort("_id", -1))
     return jsonify([format_post(p) for p in posts])
+
+
+# PUT /api/posts/<post_id> (Owner edits own review)
+@app.put("/api/posts/<post_id>")
+def update_post(post_id):
+    if "user_id" not in session:
+        return jsonify({"error": "Not logged in"}), 401
+
+    post = find_post_by_id(post_id)
+    if not post:
+        return jsonify({"error": "Review not found"}), 404
+
+    if not is_post_owner(post, session["user_id"]):
+        return jsonify({"error": "You can only edit your own reviews"}), 403
+
+    data = request.get_json() or {}
+    rating = data.get("rating")
+    comment = data.get("comment")
+
+    if rating is None:
+        return jsonify({"error": "Rating is required"}), 400
+    try:
+        rating = float(rating)
+    except (TypeError, ValueError):
+        return jsonify({"error": "Rating must be a number"}), 400
+    if rating < 1 or rating > 10:
+        return jsonify({"error": "Rating must be between 1 and 10"}), 400
+
+    if comment is None:
+        return jsonify({"error": "Comment is required"}), 400
+    if not isinstance(comment, str):
+        return jsonify({"error": "Comment must be text"}), 400
+    comment = comment.strip()
+    if not comment:
+        return jsonify({"error": "Comment cannot be empty"}), 400
+
+    posts_collection.update_one(
+        {"_id": post["_id"]},
+        {"$set": {"rating": rating, "comment": comment}}
+    )
+
+    updated = find_post_by_id(post_id)
+    return jsonify(format_post(updated))
+
+
+# DELETE /api/posts/<post_id> (Owner or admin deletes a review)
+@app.delete("/api/posts/<post_id>")
+def delete_post(post_id):
+    if "user_id" not in session:
+        return jsonify({"error": "Not logged in"}), 401
+
+    post = find_post_by_id(post_id)
+    if not post:
+        return jsonify({"error": "Review not found"}), 404
+
+    is_owner = is_post_owner(post, session["user_id"])
+    is_admin = bool(session.get("is_admin"))
+    if not is_owner and not is_admin:
+        return jsonify({"error": "You can only delete your own reviews"}), 403
+
+    posts_collection.delete_one({"_id": post["_id"]})
+    return jsonify({"message": "Review deleted successfully"})
 
 
 # Static assets route

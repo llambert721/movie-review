@@ -327,6 +327,63 @@ body {
   color: #444;
 }
 
+.review-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.review-actions button {
+  width: auto;
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.btn-secondary {
+  background: #ececec;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: #e0e0e0;
+}
+
+.btn-danger {
+  background: #8b3a3a;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-danger:hover {
+  background: #722f2f;
+}
+
+.review-edit-form {
+  margin-top: 10px;
+  display: grid;
+  gap: 10px;
+}
+
+.review-edit-form label {
+  display: grid;
+  gap: 4px;
+  font-size: 14px;
+}
+
+.review-edit-form input,
+.review-edit-form textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font: inherit;
+}
+
 /* ==========================================
    RESPONSIVE DESIGN
    ========================================== */
