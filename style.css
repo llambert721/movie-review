@@ -397,3 +397,190 @@ body {
     font-size: 38px;
   }
 }
+
+/* ==========================================
+   SHARED PAGE PIECES (feed, movies, movie page)
+   ========================================== */
+.page-section {
+  margin-top: 18px;
+}
+
+.form-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.form-grid label {
+  display: grid;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.form-grid input,
+.form-grid select,
+.form-grid textarea,
+.controls select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d4d4d4;
+  border-radius: 8px;
+  font: inherit;
+  font-weight: normal;
+  background: white;
+}
+
+.form-grid .primary,
+.btn-inline {
+  width: auto;
+  justify-self: start;
+  padding: 10px 18px;
+}
+
+.message.success {
+  color: #2e7d32;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: end;
+}
+
+.controls label {
+  display: grid;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: bold;
+  min-width: 150px;
+}
+
+/* ==========================================
+   MOVIES
+   ========================================== */
+.movie-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.movie-card {
+  background: white;
+  border: 1px solid #e3e3e3;
+  border-radius: 14px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.movie-card h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.movie-card h3 a {
+  color: #25170f;
+  text-decoration: none;
+}
+
+.movie-card h3 a:hover {
+  text-decoration: underline;
+}
+
+.movie-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+  color: #6d6d6d;
+}
+
+.genre-tag {
+  background: #f7f1ed;
+  border: 1px solid #ead9ce;
+  color: #67402d;
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.avg-rating {
+  color: #67402d;
+  font-weight: bold;
+}
+
+.movie-description {
+  margin: 0;
+  color: #444;
+  line-height: 1.5;
+}
+
+.movie-card .review-actions {
+  margin-top: auto;
+}
+
+.movie-edit-form {
+  display: grid;
+  gap: 10px;
+}
+
+.movie-edit-form label {
+  display: grid;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.movie-edit-form input,
+.movie-edit-form textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font: inherit;
+  font-weight: normal;
+}
+
+.movie-hero-rating {
+  font-size: 22px;
+  color: #67402d;
+  font-weight: bold;
+}
+
+/* ==========================================
+   FEED
+   ========================================== */
+.feed-item {
+  border-top: 1px solid #e3e3e3;
+  padding: 16px 0;
+}
+
+.feed-item:first-child {
+  border-top: 0;
+}
+
+.feed-byline {
+  font-size: 13px;
+  color: #6d6d6d;
+  margin: 0 0 4px;
+}
+
+.feed-byline a,
+.feed-item .review-title a {
+  color: #67402d;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.feed-byline a:hover,
+.feed-item .review-title a:hover {
+  text-decoration: underline;
+}
+
+[hidden] {
+  display: none !important;
+}

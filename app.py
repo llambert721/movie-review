@@ -5,6 +5,7 @@ from bson.objectid import ObjectId
 import os
 import re
 import urllib.parse
+from datetime import datetime, timezone
 
 # Load .env file if present
 def load_env(filepath=".env"):
@@ -78,9 +79,19 @@ def format_post(post):
         if not movie:
             movie = movies_collection.find_one({"_id": movie_id})
 
+    author = None
+    author_id = post.get("user_id")
+    if author_id is not None and ObjectId.is_valid(str(author_id)):
+        try:
+            author = users_collection.find_one({"_id": ObjectId(str(author_id))})
+        except Exception:
+            pass
+
     return {
         "id": str(post["_id"]),
         "user_id": str(post.get("user_id", "")),
+        "username": author.get("username", "") if author else "",
+        "display_name": (author.get("display_name") or author.get("username", "")) if author else "Unknown User",
         "movie_id": str(movie_id) if movie_id else "",
         "movie_title": movie.get("title") if movie else post.get("movie_title", "Unknown Movie"),
         "movie_genre": movie.get("genre", "") if movie else "",
@@ -107,6 +118,80 @@ def is_post_owner(post, user_id):
     if post_user_id is None or user_id is None:
         return False
     return str(post_user_id) == str(user_id)
+
+
+# Helper: find movie by id
+def find_movie_by_id(movie_id):
+    if not movie_id or not ObjectId.is_valid(movie_id):
+        return None
+    try:
+        return movies_collection.find_one({"_id": ObjectId(movie_id)})
+    except Exception:
+        return None
+
+
+# Helper: query matching posts for a movie (movie_id may be stored as str or ObjectId)
+def movie_posts_query(movie_id):
+    clauses = [{"movie_id": str(movie_id)}]
+    if ObjectId.is_valid(str(movie_id)):
+        clauses.append({"movie_id": ObjectId(str(movie_id))})
+    return {"$or": clauses}
+
+
+# Helper: average rating and review count for every movie -> {movie_id: (avg, count)}
+def get_rating_stats():
+    totals = {}
+    for p in posts_collection.find({}, {"movie_id": 1, "rating": 1}):
+        mid = str(p.get("movie_id", ""))
+        try:
+            rating = float(p.get("rating", 0))
+        except (TypeError, ValueError):
+            continue
+        total, count = totals.get(mid, (0.0, 0))
+        totals[mid] = (total + rating, count + 1)
+    return {mid: (round(t / c, 1), c) for mid, (t, c) in totals.items()}
+
+
+def format_movie(movie, stats):
+    mid = str(movie["_id"])
+    avg, count = stats.get(mid, (None, 0))
+    return {
+        "id": mid,
+        "title": movie.get("title", ""),
+        "release_date": movie.get("release_date", ""),
+        "genre": movie.get("genre", ""),
+        "description": movie.get("description", ""),
+        "avg_rating": avg,
+        "review_count": count
+    }
+
+
+# Helper: validate movie payload -> (clean_dict, error_message)
+def validate_movie_payload(data):
+    title = (data.get("title") or "").strip()
+    genre = (data.get("genre") or "").strip()
+    description = (data.get("description") or "").strip()
+    release_date = (data.get("release_date") or "").strip()
+
+    if not title:
+        return None, "Title is required"
+    if not release_date:
+        return None, "Release date is required"
+    try:
+        datetime.strptime(release_date, "%Y-%m-%d")
+    except ValueError:
+        return None, "Release date must be in YYYY-MM-DD format"
+    if not genre:
+        return None, "Genre is required"
+    if not description:
+        return None, "Description is required"
+
+    return {
+        "title": title,
+        "release_date": release_date,
+        "genre": genre,
+        "description": description
+    }, None
 
 
 # ==========================================
@@ -442,12 +527,181 @@ def delete_post(post_id):
     return jsonify({"message": "Review deleted successfully"})
 
 
-# Static assets route
+# ==========================================
+# MOVIE API ENDPOINTS
+# ==========================================
+
+# GET /api/movies?sort=date|rating|genre|title&order=asc|desc&genre=Drama
+@app.get("/api/movies")
+def list_movies():
+    sort_key = request.args.get("sort", "date")
+    order = request.args.get("order", "desc")
+    genre_filter = request.args.get("genre", "").strip()
+
+    query = {}
+    if genre_filter:
+        query["genre"] = {"$regex": f"^{re.escape(genre_filter)}$", "$options": "i"}
+
+    stats = get_rating_stats()
+    movies = [format_movie(m, stats) for m in movies_collection.find(query)]
+
+    reverse = order != "asc"
+    if sort_key == "rating":
+        movies.sort(key=lambda m: (m["avg_rating"] if m["avg_rating"] is not None else -1,
+                                   m["title"].lower()), reverse=reverse)
+    elif sort_key == "genre":
+        movies.sort(key=lambda m: (m["genre"].lower(), m["title"].lower()), reverse=reverse)
+    elif sort_key == "title":
+        movies.sort(key=lambda m: m["title"].lower(), reverse=reverse)
+    else:
+        movies.sort(key=lambda m: (m["release_date"], m["title"].lower()), reverse=reverse)
+
+    return jsonify(movies)
+
+
+# GET /api/genres
+@app.get("/api/genres")
+def list_genres():
+    genres = {g.strip() for g in movies_collection.distinct("genre") if g and g.strip()}
+    return jsonify(sorted(genres, key=str.lower))
+
+
+# GET /api/movies/<id>
+@app.get("/api/movies/<movie_id>")
+def get_movie(movie_id):
+    movie = find_movie_by_id(movie_id)
+    if not movie:
+        return jsonify({"error": "Movie not found"}), 404
+    return jsonify(format_movie(movie, get_rating_stats()))
+
+
+# GET /api/movies/<id>/posts
+@app.get("/api/movies/<movie_id>/posts")
+def get_movie_posts(movie_id):
+    movie = find_movie_by_id(movie_id)
+    if not movie:
+        return jsonify({"error": "Movie not found"}), 404
+    posts = posts_collection.find(movie_posts_query(movie_id)).sort("_id", -1)
+    return jsonify([format_post(p) for p in posts])
+
+
+# POST /api/movies (admin adds a movie)
+@app.post("/api/movies")
+def create_movie():
+    if "user_id" not in session:
+        return jsonify({"error": "Not logged in"}), 401
+    if not session.get("is_admin"):
+        return jsonify({"error": "Administrator privilege required"}), 403
+
+    clean, error = validate_movie_payload(request.get_json() or {})
+    if error:
+        return jsonify({"error": error}), 400
+
+    result = movies_collection.insert_one(clean)
+    movie = movies_collection.find_one({"_id": result.inserted_id})
+    return jsonify(format_movie(movie, {})), 201
+
+
+# PUT /api/movies/<id> (admin edits a movie)
+@app.put("/api/movies/<movie_id>")
+def update_movie(movie_id):
+    if "user_id" not in session:
+        return jsonify({"error": "Not logged in"}), 401
+    if not session.get("is_admin"):
+        return jsonify({"error": "Administrator privilege required"}), 403
+
+    movie = find_movie_by_id(movie_id)
+    if not movie:
+        return jsonify({"error": "Movie not found"}), 404
+
+    clean, error = validate_movie_payload(request.get_json() or {})
+    if error:
+        return jsonify({"error": error}), 400
+
+    movies_collection.update_one({"_id": movie["_id"]}, {"$set": clean})
+    updated = movies_collection.find_one({"_id": movie["_id"]})
+    return jsonify(format_movie(updated, get_rating_stats()))
+
+
+# DELETE /api/movies/<id> (admin deletes a movie and its reviews)
+@app.delete("/api/movies/<movie_id>")
+def delete_movie(movie_id):
+    if "user_id" not in session:
+        return jsonify({"error": "Not logged in"}), 401
+    if not session.get("is_admin"):
+        return jsonify({"error": "Administrator privilege required"}), 403
+
+    movie = find_movie_by_id(movie_id)
+    if not movie:
+        return jsonify({"error": "Movie not found"}), 404
+
+    posts_collection.delete_many(movie_posts_query(movie_id))
+    movies_collection.delete_one({"_id": movie["_id"]})
+    return jsonify({"message": "Movie deleted successfully"})
+
+
+# ==========================================
+# FEED & CREATE POST API ENDPOINTS
+# ==========================================
+
+# GET /api/posts (community feed, newest first)
+@app.get("/api/posts")
+def get_feed():
+    try:
+        limit = min(max(int(request.args.get("limit", 100)), 1), 200)
+    except ValueError:
+        limit = 100
+    posts = posts_collection.find({}).sort("_id", -1).limit(limit)
+    return jsonify([format_post(p) for p in posts])
+
+
+# POST /api/posts (logged-in user reviews a movie)
+@app.post("/api/posts")
+def create_post():
+    if "user_id" not in session:
+        return jsonify({"error": "Not logged in"}), 401
+
+    data = request.get_json() or {}
+    movie = find_movie_by_id(str(data.get("movie_id", "")))
+    if not movie:
+        return jsonify({"error": "Please choose a valid movie"}), 400
+
+    rating = data.get("rating")
+    if rating is None or rating == "":
+        return jsonify({"error": "Rating is required"}), 400
+    try:
+        rating = float(rating)
+    except (TypeError, ValueError):
+        return jsonify({"error": "Rating must be a number"}), 400
+    if rating < 1 or rating > 10:
+        return jsonify({"error": "Rating must be between 1 and 10"}), 400
+
+    comment = data.get("comment")
+    if not isinstance(comment, str) or not comment.strip():
+        return jsonify({"error": "Comment cannot be empty"}), 400
+
+    new_post = {
+        "user_id": session["user_id"],
+        "movie_id": str(movie["_id"]),
+        "movie_title": movie.get("title", ""),
+        "rating": rating,
+        "comment": comment.strip(),
+        "created_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")
+    }
+    result = posts_collection.insert_one(new_post)
+    created = posts_collection.find_one({"_id": result.inserted_id})
+    return jsonify(format_post(created)), 201
+
+
+# Static assets route (only front-end file types are served)
+ALLOWED_STATIC_EXTENSIONS = {".html", ".css", ".js", ".png", ".jpg", ".jpeg", ".gif", ".svg", ".ico", ".webp"}
+
 @app.get("/<path:filename>")
 def serve_static(filename):
-    if filename.endswith(".py") or filename.startswith("."):
-        return "Access denied", 403
-    if os.path.exists(filename):
+    ext = os.path.splitext(filename)[1].lower()
+    if ext not in ALLOWED_STATIC_EXTENSIONS:
+        return "Not found", 404
+    if os.path.isfile(filename):
         return send_from_directory(".", filename)
     return "Not found", 404
 

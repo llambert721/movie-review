@@ -3,34 +3,63 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>User Dashboard</title>
+<title>Movie - Movie Review</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header class="topbar">
   <div class="nav">
-    <div><strong>Northstar Coffee</strong><span>User Dashboard</span></div>
-    <button id="logoutButton">Logout</button>
+    <div><strong>Movie Review</strong><span>Movie Details</span></div>
+    <div>
+      <a href="feed.html">Feed</a>
+      <a href="moviefeed.html">Movies</a>
+      <a id="myProfileLink" href="myprofileuser.html">My Profile</a>
+      <button id="authButton">Login</button>
+    </div>
   </div>
 </header>
 <main class="dashboard">
   <section class="welcome">
-    <p class="eyebrow">USER AREA</p>
-    <h1>Welcome, <span id="userName"></span></h1>
-    <p>This page is available to authenticated users.</p>
+    <p class="eyebrow" id="movieGenre">MOVIE</p>
+    <h1 id="movieTitle">Loading...</h1>
+    <div class="movie-meta">
+      <span id="movieDate"></span>
+      <span class="movie-hero-rating" id="movieRating"></span>
+      <span id="movieCount"></span>
+    </div>
+    <p id="movieDescription"></p>
+    <p><a href="moviefeed.html">&larr; Back to all movies</a></p>
   </section>
-  <section class="grid">
+
+  <section class="page-section" id="reviewFormSection" hidden>
     <article class="panel">
-      <h2>Your Account</h2>
-      <p><strong>Email:</strong> <span id="userEmail"></span></p>
-      <p><strong>Role:</strong> <span id="userRole"></span></p>
+      <h2>Review this movie</h2>
+      <form id="postForm" class="form-grid">
+        <label>Rating (1-10)
+          <input id="rating" type="number" min="1" max="10" step="0.5" required>
+        </label>
+        <label>Comment
+          <textarea id="comment" rows="3" required placeholder="What did you think?"></textarea>
+        </label>
+        <button type="submit" class="primary">Post review</button>
+        <p id="postMessage" class="message"></p>
+      </form>
     </article>
+  </section>
+
+  <section class="page-section" id="guestPromptSection" hidden>
     <article class="panel">
-      <h2>User Features</h2>
-      <p>View menu, place orders, and manage personal activity.</p>
+      <p><a href="login.html">Log in</a> or <a href="adduser.html">create an account</a> to review this movie.</p>
+    </article>
+  </section>
+
+  <section class="page-section">
+    <article class="panel">
+      <h2>Reviews</h2>
+      <div id="reviewList"><p class="muted">Loading reviews...</p></div>
     </article>
   </section>
 </main>
-<script src="dashboard.js"></script>
+<script src="moviepage.js"></script>
 </body>
 </html>
