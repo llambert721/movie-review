@@ -46,10 +46,10 @@ async function initUserPage() {
         return;
     }
 
-    await loadUserData(targetUser);
+    await loadUserData(targetUser, currentUser);
 }
 
-async function loadUserData(targetUser) {
+async function loadUserData(targetUser, currentUser) {
     const displayName = document.getElementById("profileDisplayName");
     const username = document.getElementById("profileUsername");
     const infoUsername = document.getElementById("infoUsername");
@@ -58,6 +58,7 @@ async function loadUserData(targetUser) {
     const headerName = document.getElementById("reviewsHeaderName");
     const postCountElement = document.getElementById("userPostCount");
     const postsContainer = document.getElementById("userPostsList");
+    const isAdmin = !!(currentUser && (currentUser.is_admin || currentUser.role === "admin"));
 
     try {
         const userRes = await fetch(`/api/users/${encodeURIComponent(targetUser)}`);
@@ -96,13 +97,19 @@ async function loadUserData(targetUser) {
         }
 
         postsContainer.innerHTML = posts.map(post => {
+            const postId = escapeHtml(post.id || "");
             const movieTitle = escapeHtml(post.movie_title || post.title || "Unknown Movie");
             const rating = escapeHtml(String(post.rating || 0));
             const comment = escapeHtml(post.comment || "");
             const date = post.created_at ? `<span class="review-date">${escapeHtml(post.created_at)}</span>` : "";
+            const adminActions = isAdmin
+                ? `<div class="review-actions">
+                        <button type="button" class="btn-danger delete-review-btn" data-post-id="${postId}">Delete</button>
+                   </div>`
+                : "";
 
             return `
-                <div class="review-item">
+                <div class="review-item" data-post-id="${postId}">
                     <div class="review-header">
                         <h3 class="review-title">${movieTitle}</h3>
                         <div>
@@ -111,13 +118,45 @@ async function loadUserData(targetUser) {
                         </div>
                     </div>
                     <p class="review-comment">${comment}</p>
+                    ${adminActions}
                 </div>
             `;
         }).join("");
 
+        if (isAdmin) {
+            bindAdminDeleteActions(postsContainer, targetUser, currentUser);
+        }
+
     } catch (err) {
         postsContainer.innerHTML = '<p class="muted">Error loading user profile.</p>';
     }
+}
+
+function bindAdminDeleteActions(postsContainer, targetUser, currentUser) {
+    postsContainer.querySelectorAll(".delete-review-btn").forEach(button => {
+        button.addEventListener("click", async () => {
+            const postId = button.dataset.postId;
+            if (!confirm("Delete this review as administrator? This cannot be undone.")) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/posts/${encodeURIComponent(postId)}`, {
+                    method: "DELETE"
+                });
+                const data = await response.json();
+
+                if (!response.ok) {
+                    alert(data.error || "Failed to delete review.");
+                    return;
+                }
+
+                await loadUserData(targetUser, currentUser);
+            } catch (error) {
+                alert("Failed to delete review.");
+            }
+        });
+    });
 }
 
 function escapeHtml(str) {
