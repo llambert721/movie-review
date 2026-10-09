@@ -3,34 +3,38 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>User Dashboard</title>
+<title>Movie feed</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header class="topbar">
   <div class="nav">
-    <div><strong>Northstar Coffee</strong><span>User Dashboard</span></div>
-    <button id="logoutButton">Logout</button>
+    <div><strong>Movie Review</strong><span>Movie Feed</span></div>
+    <div>
+      <a href="feed.html">Feed</a>
+      <a href="moviefeed.html">Movies</a>
+      <a id="myProfileLink" href="myprofileuser.html">My Profile</a>
+      <button id="authButton">Logout</button>
+    </div>
   </div>
 </header>
 <main class="dashboard">
   <section class="welcome">
-    <p class="eyebrow">USER AREA</p>
-    <h1>Welcome, <span id="userName"></span></h1>
-    <p>This page is available to authenticated users.</p>
+    <h1><span>Movie Library</span></h1>
   </section>
-  <section class="grid">
+
+  <section class="movie-grid" id="movieList">
+    <p class="muted">Loading movies...</p>
     <article class="panel">
-      <h2>Your Account</h2>
-      <p><strong>Email:</strong> <span id="userEmail"></span></p>
-      <p><strong>Role:</strong> <span id="userRole"></span></p>
-    </article>
-    <article class="panel">
-      <h2>User Features</h2>
-      <p>View menu, place orders, and manage personal activity.</p>
+      <div >
+        <h2><span><a href="moviepage.html">Good movie (2026)</a></span></h2>
+        <p><strong><em>Comedy</em></strong></p>
+        <p>Some info about the movie.</p>
+      </div>
     </article>
   </section>
+
 </main>
-<script src="dashboard.js"></script>
+<script src="moviefeed.js"></script>
 </body>
 </html>
