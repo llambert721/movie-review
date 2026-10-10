@@ -29,7 +29,8 @@ body {
    ========================================== */
 .auth-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #25170f, #6f432d);
+  background: #f4f6f8;
+  color: #252525;
 }
 
 .auth-shell {
@@ -44,7 +45,7 @@ body {
 }
 
 .auth-brand {
-  color: white;
+  color: #252525;
 }
 
 .auth-brand h1 {
@@ -54,7 +55,7 @@ body {
 }
 
 .auth-brand > p {
-  color: #ecd9cb;
+  color: #6d6d6d;
 }
 
 .flow {
@@ -65,8 +66,9 @@ body {
 }
 
 .flow span {
-  background: #ffffff14;
-  border: 1px solid #ffffff22;
+  background: white;
+  border: 1px solid #e3e3e3;
+  color: #252525;
   padding: 8px 10px;
   border-radius: 8px;
 }
@@ -74,15 +76,15 @@ body {
 .auth-card {
   background: white;
   padding: 32px;
-  border-radius: 18px;
-  box-shadow: 0 20px 50px #0004;
+  border-radius: 15px;
+  border: 1px solid #e3e3e3;
 }
 
 .logo {
   width: 48px;
   height: 48px;
   border-radius: 14px;
-  background: #73442d;
+  background: #292929;
   color: white;
   display: grid;
   place-items: center;
@@ -134,6 +136,16 @@ body {
 .auth-switch {
   margin-top: 15px;
   font-size: 14px;
+}
+
+.auth-switch a {
+  color: #67402d;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.auth-switch a:hover {
+  text-decoration: underline;
 }
 
 .demo-box {
